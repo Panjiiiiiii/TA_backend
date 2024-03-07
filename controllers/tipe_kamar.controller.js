@@ -34,9 +34,9 @@ exports.findType = async (req, res) => {
 };
 
 exports.addType = (req, res) => {
-  upload(request, response, async (error) => {
+  upload(req, res, async (error) => {
     if (error) {
-      return response.json({ message: error });
+      return res.json({ message: error });
     }
     let newType = {
       nama_tipe_kamar: req.body.nama_tipe_kamar,
@@ -63,22 +63,22 @@ exports.addType = (req, res) => {
 };
 
 exports.updateType = (req, res) => {
-  upload(request, response, async (error) => {
+  upload(req, res, async (error) => {
     if (error) {
-      return response.json({
+      return res.json({
         success: false,
         message: error.message,
       });
     } else {
       // If no error occurred during upload, continue processing the request.
-      let id = request.params.id;
+      let id = req.params.id;
       let newTypes = {
         nama_tipe_kamar: req.body.nama_tipe_kamar,
         harga: Number(req.body.harga),
         deskripsi: req.body.deskripsi,
       };
 
-      if (request.file) {
+      if (req.file) {
         const selectedType = await tipeModel.findOne({ where: { id: id } });
         const oldFotoType = selectedType.foto;
         const pathFoto = path.join(
@@ -93,7 +93,7 @@ exports.updateType = (req, res) => {
       }
 
       tipeModel
-        .update(newTypes, { where: { id_tipe_kamar: id } })
+        .update(newTypes, { where: { id: id } })
         .then((result) => {
           return res.json({
             success: true,
