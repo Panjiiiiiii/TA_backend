@@ -9,7 +9,7 @@ const authenticate = async (req, res) => {
     password: bcrypt.hashSync(req.body.password, 10),
   };
 
-  let dataUser = await userModel.findOne({ where: dataLogin });
+  let dataUser = await userModel.findAll({ where: dataLogin });
 
   if (dataUser) {
     let payLoad = JSON.stringify(dataUser);
@@ -47,7 +47,7 @@ const authorize = (req, res, next) => {
       });
     }
 
-    request.user = verifiedUser;
+    req.user = verifiedUser;
     next();
   } else {
     return res.status(500).json({
