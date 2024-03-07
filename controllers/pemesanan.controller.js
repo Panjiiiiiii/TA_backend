@@ -21,6 +21,15 @@ exports.getAllpemesanan = async (req,res) => {
     })
 }
 //get pemesanan by user (admin)
+
+exports.getAllpemesanan = async (req,res) => {
+    let pemesanan = await pemesananModel.findAll();
+    return res.json ({
+        succsess : true,
+        data : pemesanan,
+        message : `All datas have been loaded`
+    })
+}
 //get pemesanan (user)
 //add pemesanan (user)
 //get nomor kamar from kamar
