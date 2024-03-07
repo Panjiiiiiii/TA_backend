@@ -5,7 +5,7 @@ const bcrypt = require(`bcrypt`);
 const upload = require("./upload-foto-user.controller copy").single("foto");
 const fs = require("fs");
 const path = require("path");
-const {sequelize} = require('sequelize')
+const {sequelize} = require('../models/index')
 
 exports.getAllUser = async (req, res) => {
   try {
@@ -229,11 +229,11 @@ exports.resetPassword = async (req, res) => {
 exports.countCustomer = async (req, res) => {
   try {
     const count = await sequelize.query(
-      `SELECT COUNT(id_user) as total_customers FROM users where role like '%customer%' `
+      `SELECT COUNT(id) as total_customers FROM users where role like '%customer%' `
     );
     return res.json({
       success: true,
-      datas: count,
+      datas: count[0],
       message: `All datas have been loaded`,
     });
   } catch (error) {
