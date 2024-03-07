@@ -14,7 +14,7 @@ exports.getAllType = async (req, res) => {
 };
 
 exports.findType = async (req, res) => {
-  let keyword = req.body.keyword;
+  let keyword = req.params.keyword;
 
   let tipe = await tipeModel.findAll({
     where: {
@@ -111,9 +111,9 @@ exports.updateType = (req, res) => {
 };
 
 exports.deleteType = async (req, res) => {
-  let id = request.params.id;
+  let id = req.params.id;
 
-  const type = await tipeModel.findOne({ where: { id_tipe_kamar: id } });
+  const type = await tipeModel.findOne({ where: { id: id } });
   const oldFotoType = type.foto;
   const pathFoto = path.join(__dirname, "../images/customer", oldFotoType);
   if (fs.existsSync(pathFoto)) {
@@ -121,11 +121,11 @@ exports.deleteType = async (req, res) => {
   }
 
   tipeModel
-    .destroy({ where: { id_tipe_kamar: id } })
+    .destroy({ where: { id: id } })
     .then((result) => {
       return res.json({
         succsess: true,
-        code: response.statusCode,
+        code: res.statusCode,
         message: "Data has been updated",
       });
     })
