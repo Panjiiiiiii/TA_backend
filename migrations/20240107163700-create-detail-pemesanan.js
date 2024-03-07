@@ -13,14 +13,14 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: 'pemesanans',
-          key: 'id_pemesanan'
+          key: 'id'
         }
       },
       id_kamar: {
         type: Sequelize.INTEGER,
         references: {
           model: 'kamars',
-          key: 'id_kamar'
+          key: 'id'
         }
       },
       tgl_akses: {
