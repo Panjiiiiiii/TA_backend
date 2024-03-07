@@ -5,6 +5,7 @@ const bcrypt = require(`bcrypt`);
 const upload = require("./upload-foto-user.controller copy").single("foto");
 const fs = require("fs");
 const path = require("path");
+const {sequelize} = require('../models/index')
 
 exports.getAllUser = async (req, res) => {
   try {
@@ -25,27 +26,18 @@ exports.getAllUser = async (req, res) => {
   }
 };
 
-exports.getUserById = async (req, res) => {
-  let user = req.params.id;
+exports.getUser = async (req, res) => {
+  let keyword = req.params.keyword;
 
   try {
-    let dataUser = await userModel.findOne({ where: { id_user: user } });
-
-    return res.status(200).json(dataUser);
-  } catch (error) {
-    return res.status(404).json({
-      success: false,
-      message: "Member Not Found",
-    });
-  }
-};
-
-exports.findUser = async (req, res) => {
-  let keyword = req.body.keyword;
-
-  try {
-    let dataUser = await userModel.findAll({
-      where: { username: { [Op.substring]: keyword } },
+    let dataUser = await userModel.findOne({
+      where: {
+        [Op.or]: [
+          { username: { [Op.substring]: keyword } },
+          { email: { [Op.substring]: keyword } },
+          { role: { [Op.substring]: keyword } },
+        ],
+      },
     });
 
     return res.status(200).json(dataUser);
@@ -69,7 +61,7 @@ exports.addUser = async (req, res) => {
 
     let newUser = {
       username: req.body.username,
-      email : req.body.email,
+      email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 10),
       foto: req.file.filename,
       role: req.body.role,
@@ -102,7 +94,7 @@ exports.updateUser = async (req, res) => {
     };
     if (req.file) {
       const selectedCust = await userModel.findOne({
-        where: { id_user: idUser },
+        where: { id: idUser },
       });
 
       const oldFoto = selectedCust.foto;
@@ -116,7 +108,7 @@ exports.updateUser = async (req, res) => {
     }
 
     userModel
-      .update(dataUser, { where: { id_user: idUser } })
+      .update(dataUser, { where: { id: idUser } })
       .then((result) => {
         res.json({
           result: result,
@@ -133,7 +125,7 @@ exports.updateUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
   let idUser = req.params.id;
-  const user = await userModel.findOne({ where: { id_user: idUser } });
+  const user = await userModel.findOne({ where: { id: idUser } });
   const oldFoto = user.foto;
   const pathFoto = path.join(__dirname, "../images/customer", oldFoto);
 
@@ -142,7 +134,7 @@ exports.deleteUser = async (req, res) => {
   }
 
   userModel
-    .destroy({ where: { id_user: idUser } })
+    .destroy({ where: { id: idUser } })
     .then((result) => {
       return res.json({
         success: true,
@@ -177,10 +169,10 @@ exports.register = async (req, res) => {
 
     let newUser = {
       username: req.body.username,
-      email : req.body.email,
+      email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 10),
       foto: req.file.filename,
-      role: 'customer',
+      role: "customer",
     };
 
     userModel
@@ -206,7 +198,7 @@ exports.resetPassword = async (req, res) => {
 
     const user = await userModel.findOne({
       where: {
-        id_user: idUser,
+        id: idUser,
         password: oldPassword,
       },
     });
@@ -214,7 +206,7 @@ exports.resetPassword = async (req, res) => {
     if (user) {
       await userModel.update(
         { password: newPassword },
-        { where: { id_user: idUser } }
+        { where: { id: idUser } }
       );
       return res.json({
         success: true,
@@ -237,7 +229,7 @@ exports.resetPassword = async (req, res) => {
 exports.countCustomer = async (req, res) => {
   try {
     const count = await sequelize.query(
-      `SELECT COUNT(id_user) as total_customers FROM users where role like '%customer%' `
+      `SELECT COUNT(id) as total_customers FROM users where role like '%customer%' `
     );
     return res.json({
       success: true,
