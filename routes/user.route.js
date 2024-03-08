@@ -7,13 +7,13 @@ const userController = require("../controllers/user.controller");
 
 app.use(express.json())
 
-app.get("/", userController.getAllUser);
-app.get("/count", userController.countCustomer)
-app.post("/add", userController.addUser);
-app.post("/register", userController.register);
-app.post("/find/:keyword", userController.getUser);
-app.put("/update/:id", userController.updateUser);
+app.get("/", authorize, isAdmin, userController.getAllUser);
+app.get("/count", authorize, isAdmin, userController.countCustomer)
+app.post("/add", validateUser, userController.addUser);
+app.post("/register", validateUser, userController.register);
+app.post("/find/:keyword", authorize, isAdmin, userController.getUser);
+app.put("/update/:id", authorize, isCustomer, validateUser, userController.updateUser);
 app.put("/reset/:id", userController.resetPassword)
-app.delete("/delete/:id", userController.deleteUser);
+app.delete("/delete/:id", authorize, isAdmin, userController.deleteUser);
 
 module.exports = app;
