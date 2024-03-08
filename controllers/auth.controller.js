@@ -6,12 +6,22 @@ const secret = `user`;
 const authenticate = async (req, res) => {
   let dataLogin = {
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 10),
+    password: req.body.password 
   };
 
-  let dataUser = await userModel.findAll({ where: dataLogin });
+  
 
-  if (dataUser) {
+  let dataUser = await userModel.findOne({ where: {email : dataLogin.email} });
+
+  if(dataUser == null){
+    return res.status(500).json({
+      message : `Email or password not match`
+    })
+  }
+
+  const valid = await bcrypt.compare(dataLogin.password, dataUser.password)
+
+  if (valid) {
     let payLoad = JSON.stringify(dataUser);
     console.log(payLoad);
 

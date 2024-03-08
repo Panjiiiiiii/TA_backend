@@ -9,7 +9,7 @@ app.use(express.json())
 
 app.get("/", authorize, isAdmin, userController.getAllUser);
 app.get("/count", authorize, isAdmin, userController.countCustomer)
-app.post("/add", validateUser, userController.addUser);
+app.post("/add", userController.addUser);
 app.post("/register", validateUser, userController.register);
 app.post("/find/:keyword", authorize, isAdmin, userController.getUser);
 app.put("/update/:id", authorize, isCustomer, validateUser, userController.updateUser);
