@@ -3,9 +3,7 @@ const pemesananModel = require("../models/index").pemesanan;
 const detailModel = require("../models/index").detail_pemesanamn;
 const kamarModel = require("../models/index").kamar;
 const Op = require("sequelize").Op;
-const {validateUser} = require('../middlewares/user-validation')
-const {authorize} = require('../controllers/auth.controller')
-const {isCustomer,isAdmin} = require('../middlewares/role-validation')
+
 
 //get pemesanan by user
 exports.getAllpemesanan = async (req, res) => {
@@ -17,7 +15,7 @@ exports.getAllpemesanan = async (req, res) => {
   });
 };
 //get pemesanan by id
-app.get("/findById/:id", authorize, isAdmin, (req, res) => {
+app.get("/findById/:id", (req, res) => {
   pemesanan
     .findAll({
       where: { id_user: req.params.id },
@@ -34,7 +32,7 @@ app.get("/findById/:id", authorize, isAdmin, (req, res) => {
     });
 });
 //pemesanan kamar hotel
-app.post("/", authorize, isCustomer, validateUser, async (req, res) => {
+app.post("/", async (req, res) => {
   // Mendapatkan timestamp saat ini
   let tw = Date.now();
 
@@ -159,7 +157,19 @@ app.post("/", authorize, isCustomer, validateUser, async (req, res) => {
       });
   }
 });
+//get pemesanan (user)
 
+//add pemesanan (user)
+
+//get nomor kamar from kamar
+
+//input pemesanan
+
+//input detail pemesanan
+
+//update pemesanan (admin) check-in -> check-out
+
+//delete pemesanan (admin)
 
 //sum total harga pemesanan (user)
 // exports.getTagihan = async (req, res) => {
