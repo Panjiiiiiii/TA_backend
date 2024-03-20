@@ -6,7 +6,6 @@ const kamarModel = require("../models/index").kamar;
 const Op = require("sequelize").Op;
 const bodyParser = require("body-parser");
 const express = require("express");
-const { sequelize } = require("../models/index");
 
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
@@ -188,11 +187,11 @@ app.post("/", async (req, res) => {
 //delete pemesanan (admin)
 
 //sum total harga pemesanan (user)
-exports.getTagihan = async (req, res) => {
-  let id_user = req.params.id;
+// exports.getTagihan = async (req, res) => {
+//   let id_user = req.params.id;
 
-  let getHarga = await sequelize.query(
-    `SELECT SUM(harga) from detail_pemesanan WHERE `
-  );
-};
+//   let getHarga = await sequelize.query(
+//     `SELECT SUM(harga) from detail_pemesanan WHERE `
+//   );
+// };
 //best seller (user)
