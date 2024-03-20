@@ -159,19 +159,7 @@ app.post("/", authorize, isCustomer, validateUser, async (req, res) => {
       });
   }
 });
-//get pemesanan (user)
 
-//add pemesanan (user)
-
-//get nomor kamar from kamar
-
-//input pemesanan
-
-//input detail pemesanan
-
-//update pemesanan (admin) check-in -> check-out
-
-//delete pemesanan (admin)
 
 //sum total harga pemesanan (user)
 // exports.getTagihan = async (req, res) => {
