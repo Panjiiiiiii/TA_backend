@@ -1,14 +1,11 @@
-const userModel = require("../models/index").user;
 const tipeModel = require("../models/index").tipe_kamar;
 const pemesananModel = require("../models/index").pemesanan;
 const detailModel = require("../models/index").detail_pemesanamn;
 const kamarModel = require("../models/index").kamar;
 const Op = require("sequelize").Op;
-const bodyParser = require("body-parser");
-const express = require("express");
-
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: false }));
+const {validateUser} = require('../middlewares/user-validation')
+const {authorize} = require('../controllers/auth.controller')
+const {isCustomer,isAdmin} = require('../middlewares/role-validation')
 
 //get pemesanan by user
 exports.getAllpemesanan = async (req, res) => {
@@ -20,10 +17,10 @@ exports.getAllpemesanan = async (req, res) => {
   });
 };
 //get pemesanan by id
-app.get("/findById/:id", (req, res) => {
+app.get("/findById/:id", authorize, isAdmin, (req, res) => {
   pemesanan
     .findAll({
-      where: { id_customer: req.params.id },
+      where: { id_user: req.params.id },
     })
     .then((result) => {
       res.json({
@@ -37,7 +34,7 @@ app.get("/findById/:id", (req, res) => {
     });
 });
 //pemesanan kamar hotel
-app.post("/", async (req, res) => {
+app.post("/", authorize, isCustomer, validateUser, async (req, res) => {
   // Mendapatkan timestamp saat ini
   let tw = Date.now();
 
@@ -48,7 +45,6 @@ app.post("/", async (req, res) => {
 
   // Data pemesanan yang akan dibuat
   let requestData = {
-    id_customer: req.body.id_customer,
     nomor_pemesanan: numberRandom,
     tgl_pemesanan: tw,
     tgl_check_in: req.body.tgl_check_in,
