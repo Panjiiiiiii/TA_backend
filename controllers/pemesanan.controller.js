@@ -10,16 +10,7 @@ const express = require("express");
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
 
-//get all pemesanan (admin)
-exports.getAllpemesanan = async (req, res) => {
-  let pemesanan = await pemesananModel.findAll();
-  return res.json({
-    succsess: true,
-    data: pemesanan,
-    message: `All datas have been loaded`,
-  });
-};
-//get pemesanan by user (user)
+//get pemesanan by user
 exports.getAllpemesanan = async (req, res) => {
   let pemesanan = await pemesananModel.findAll();
   return res.json({
