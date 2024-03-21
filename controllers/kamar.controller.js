@@ -18,12 +18,12 @@ exports.addKamar = async (req, res) => {
   try {
     let kamar = {
       nomor_kamar: req.body.nomor_kamar,
-      id: req.body.id_tipe_kamar,
+      id_tipe_kamar: req.body.id_tipe_kamar,
     };
 
     console.log("sdf: "+kamar.id);
     const existingKamar = tipeModel.findOne({
-      where: { id : kamar.id },
+      where: { id : kamar.id_tipe_kamar },
     });
 
     if (existingKamar) {
