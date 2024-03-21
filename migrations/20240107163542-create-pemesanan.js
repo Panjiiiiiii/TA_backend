@@ -27,7 +27,7 @@ module.exports = {
       jumlah_kamar: {
         type: Sequelize.INTEGER
       },
-      id: {
+      id_tipe_kamar: {
         type: Sequelize.INTEGER,
         references: {
           model: 'tipe_kamars',
