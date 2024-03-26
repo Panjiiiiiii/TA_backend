@@ -19,6 +19,9 @@ module.exports = {
           key: 'id'
         }
       },
+      status : {
+        type: Sequelize.ENUM('avalaible','booked')
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

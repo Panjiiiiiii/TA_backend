@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   kamar.init({
     nomor_kamar: DataTypes.INTEGER,
-    id_tipe_kamar: DataTypes.INTEGER
+    id_tipe_kamar: DataTypes.INTEGER,
+    status : DataTypes.ENUM('avalaible','booked')
   }, {
     sequelize,
     modelName: 'kamar',
