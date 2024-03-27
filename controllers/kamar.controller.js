@@ -1,6 +1,7 @@
 const kamarModel = require("../models/index").kamar;
 const tipeModel = require("../models/index").tipe_kamar;
 const express = require("express");
+const { sequelize } = require("../models/index");
 const Op = require(`sequelize`).Op
 const app = express();
 
@@ -32,6 +33,22 @@ exports.getAvalaible = async (req,res) => {
     message : `Room has been loaded`
   })
 
+}
+
+exports.sumAvalaible = async (req, res) => {
+  try {
+    const avalaible = await sequelize.query('SELECT tipe_kamars.nama_tipe_kamar, COUNT(kamars.nomor_kamar) AS avalaible_room FROM kamars INNER JOIN tipe_kamars ON tipe_kamars.id = kamars.id_tipe_kamar GROUP BY tipe_kamars.nama_tipe_kamar ORDER BY `avalaible_room` ASC')
+    return res.json ({
+      succsess : true,
+      datas : avalaible,
+      message : 'Datas have been loaded'
+    })
+  } catch (error) {
+    return res.json({
+      succsess : false,
+      message : error.message
+    })
+  }
 }
 
 exports.addKamar = async (req, res) => {
